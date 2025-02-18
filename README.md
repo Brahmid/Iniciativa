@@ -1,0 +1,2 @@
+# Iniciativa
+DnD ukazatel iniciativy 
