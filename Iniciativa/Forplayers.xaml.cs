@@ -44,12 +44,7 @@ namespace Iniciativa
 
         public void Update()
         {            
-            if (Items.Count > 0)
-            {
-                CharacterItem newChar = Items[0];
-                FirstImage.DataContext = newChar;
-                FirstName.DataContext = newChar;
-            }
+            
         }
     }
 }

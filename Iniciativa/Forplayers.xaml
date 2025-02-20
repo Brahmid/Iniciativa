@@ -9,6 +9,7 @@
     <Window.Resources>
         <local:VisibilityConverter x:Key="VisibilityConverter"/>
         <local:NameWithAvatarNameConverter x:Key="NameWithIndexConverter"/>
+        <local:WidthConverter x:Key="WidthConverter"/>
     </Window.Resources>
 
     <!-- WindowStyle="None"  -->
@@ -16,34 +17,19 @@
     <!-- Background-="Transparent" -->
     <Grid ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Hidden">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="2*"/>
-        </Grid.ColumnDefinitions>
-        
-            <Grid>
-                <!-- Obrázek -->
-                <Image x:Name="FirstImage" Source="{Binding AvatarPath}" Stretch="UniformToFill" />
-
-                <!-- Překrytí názvem -->
-                <TextBlock x:Name="FirstName" Text="{Binding Name}" 
-                   Background="Black" 
-                   Foreground="White"
-                   FontWeight="Bold"
-                   Opacity="0.8"
-                   HorizontalAlignment="Center" 
-                   VerticalAlignment="Bottom" 
-                   Padding="5" />
-            </Grid>
-        <ListBox x:Name="List" ItemsSource="{Binding Items}" BorderThickness="0" AlternationCount="100" ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Hidden" Grid.Column="1">           
+            <ColumnDefinition Width="*"/>            
+        </Grid.ColumnDefinitions>        
+            
+        <ListBox x:Name="List" ItemsSource="{Binding Items}" BorderThickness="0" AlternationCount="100" ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Hidden">           
                 <ListBox.ItemTemplate>               
                 <DataTemplate>
-                    <Grid Width="150"  Height="150" >
-                        <Grid.Visibility>
-                            <MultiBinding Converter="{StaticResource VisibilityConverter}">
-                                <Binding Path="Hide"/>
-                                <Binding RelativeSource="{RelativeSource AncestorType=ListBoxItem}" Path="(ItemsControl.AlternationIndex)"/>                                
-                            </MultiBinding>
-                        </Grid.Visibility>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
                         
                         <!-- Obrázek -->
                         <Image  x:Name="Image" Source="{Binding AvatarPath}" Stretch="UniformToFill" />
@@ -70,9 +56,16 @@
             <!-- Nastavení stylu ListBoxu -->
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <WrapPanel Orientation="Horizontal" />
+                    <WrapPanel />
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
+
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="Width" Value="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType=ListBox}, Converter={StaticResource WidthConverter}}" />
+                    <Setter Property="Height" Value="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType=ListBox}, Converter={StaticResource WidthConverter}}"/>
+                </Style>
+            </ListBox.ItemContainerStyle>
         </ListBox>
     </Grid>
 </Window>

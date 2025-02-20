@@ -9,14 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="CustomControls\12.png" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Resource Include="CustomControls\12.png" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Update="Avatars\1.JPG">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

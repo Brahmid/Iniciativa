@@ -78,4 +78,21 @@ namespace Iniciativa
             return null;
         }
     }
+
+    public class WidthConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is double actualWidth)
+            {
+                return actualWidth; // 3.5 položek na řádek
+            }
+            return 100; // Defaultní hodnota
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }
