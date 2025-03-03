@@ -33,7 +33,7 @@ namespace Iniciativa
             Topmost = true; // Vždy nahoře           
             ItemsEdited = new ObservableCollection<CharacterItem>();           
             InitializeComponent();
-            Update();
+            
         }
 
         private void Items_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -43,8 +43,8 @@ namespace Iniciativa
         }
 
         public void Update()
-        {            
-            
+        {
+            List.Items.Refresh();
         }
     }
 }

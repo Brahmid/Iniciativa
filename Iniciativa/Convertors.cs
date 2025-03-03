@@ -69,8 +69,50 @@ namespace Iniciativa
         {
             var name = values[0] as string;
             var avatarName = values[1] as string;
+            switch (MainWindow.NameDisplayOpt)
+            {
+                case NameDisplay.Name:
+                    return $"{name}";
+                    
+                case NameDisplay.IdAndName:
+                    return $"{name} ({avatarName})";
+                    
+                case NameDisplay.None:
+                    return "";
+                default:
+                    return "";                
+            }
+        }
 
-            return $"{name} ({avatarName})";
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        {
+            return null;
+        }
+    }
+
+    public class NameWithAvatarNameVisibilityConverter : IMultiValueConverter
+    {
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        {
+            var name = values[0] as string;           
+            switch (MainWindow.NameDisplayOpt)
+            {
+                case NameDisplay.Name:
+                    if(string.IsNullOrEmpty(name) == true)
+                    {
+                        return Visibility.Hidden;
+                    }                    
+                    return Visibility.Visible;                   
+                   
+
+                case NameDisplay.IdAndName:
+                    return Visibility.Visible;
+
+                case NameDisplay.None:
+                    return Visibility.Hidden;
+                default:
+                    return Visibility.Hidden;
+            }
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)

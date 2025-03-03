@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics.Eventing.Reader;
 using System.Globalization;
 using System.Text;
 using System.Windows;
@@ -14,16 +15,27 @@ using System.Windows.Shapes;
 
 namespace Iniciativa
 {   
+    public enum NameDisplay
+    {
+        Name,
+        IdAndName,
+        None
+    }
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
+        static public NameDisplay NameDisplayOpt { get { return _nameDisplayOpt; } }
+        static NameDisplay _nameDisplayOpt = NameDisplay.IdAndName;
+
         public ObservableCollection<CharacterItem> Items { get; set; }
 
         private Forplayers secondWindow;
 
         private CharacterItem OnTurn = null;
+
+        private bool OpenedForPlayers = false;
 
         public MainWindow()
         {
@@ -46,18 +58,65 @@ namespace Iniciativa
 
         private void OpenSecondWindow_Click(object sender, RoutedEventArgs e)
         {
-            if (secondWindow == null || !secondWindow.IsLoaded)
+            if (OpenedForPlayers)
             {
-                secondWindow = new Forplayers(Items);
-            }            
-            secondWindow.Show();
+                
+                if (secondWindow != null)
+                {
+                    secondWindow.Hide();
+                }
+                OpenPlayerWindow.Content = "Otevři hráčské okno";
+                OpenedForPlayers = false;
+            }
+            else
+            {
+                if (secondWindow == null || !secondWindow.IsLoaded)
+                {
+                    secondWindow = new Forplayers(Items);
+                    secondWindow.Closed += OnPlayerWindowClosed;
+                }
+                secondWindow.Show();
+                OpenPlayerWindow.Content = "Zavři hráčské okno";
+                OpenedForPlayers = true;
+            }
+            
+            
+        }
+
+        private void OnPlayerWindowClosed(object? sender, EventArgs e)
+        {
+            if (OpenedForPlayers)
+            {
+                OpenedForPlayers = false;
+                OpenPlayerWindow.Content = "Otevři hráčské okno";
+                OpenedForPlayers = false;
+            }
         }
 
         private void CloseSecondWindow_Click(object sender, RoutedEventArgs e)
         {
-            if (secondWindow != null)
+            switch (_nameDisplayOpt)
             {
-                secondWindow.Hide();
+                case NameDisplay.Name:
+                    NameShow.Content = "Nic";
+                    _nameDisplayOpt = NameDisplay.None;
+                    break;
+                case NameDisplay.IdAndName:
+                    NameShow.Content = "Jméno";
+                    _nameDisplayOpt = NameDisplay.Name;
+                    break;
+                case NameDisplay.None:
+                    NameShow.Content = "Jméno(id)";
+                    _nameDisplayOpt = NameDisplay.IdAndName;
+
+                    break;
+                default:
+                    break;
+            }
+
+            if (!(secondWindow == null || !secondWindow.IsLoaded))
+            {
+                secondWindow.Update();
             }
         }
 

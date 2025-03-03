@@ -28,7 +28,7 @@
         <TextBox Grid.Column="2" HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding Name}" VerticalAlignment="Center" Width="120" Grid.Row="1" Margin="10,0,0,0"/>
         <TextBox Grid.Column="2" HorizontalAlignment="Left" Margin="10,0,0,0" TextWrapping="Wrap" Text="{Binding Initiative}" VerticalAlignment="Center" Width="47" Grid.Row="2"/>
         <TextBox Grid.Column="2" HorizontalAlignment="Left" Margin="76,0,0,0" TextWrapping="Wrap" Text="{Binding InitiativeSecond}" VerticalAlignment="Center" Width="47" Grid.Row="2"/>
-        <TextBox Grid.Column="2" HorizontalAlignment="Left" Margin="10,5,0,0" TextWrapping="Wrap" Text="{Binding Notes}" VerticalAlignment="Top" Width="120" Grid.Row="5"/>
+        <TextBox Grid.Column="2" HorizontalAlignment="Left" Margin="10,5,0,0" TextWrapping="Wrap" Text="{Binding Notes}" Width="120" Grid.Row="5" Grid.RowSpan="2" AcceptsReturn="True" AcceptsTab="True"/>
         <TextBlock HorizontalAlignment="Right" TextWrapping="Wrap" Text="Iniciativa" VerticalAlignment="Center" Width="80" FlowDirection="RightToLeft" Grid.Row="2" Grid.ColumnSpan="2"/>
         <TextBlock HorizontalAlignment="Right" TextWrapping="Wrap" Text="Poznamky" VerticalAlignment="Center" Width="80" FlowDirection="RightToLeft" Grid.Row="5" Grid.ColumnSpan="2" Margin="566,0,0,0"/>
         <TextBlock HorizontalAlignment="Right" TextWrapping="Wrap" Text="Životy" VerticalAlignment="Center" Width="80" FlowDirection="RightToLeft" Grid.Row="3" Grid.ColumnSpan="2"/>

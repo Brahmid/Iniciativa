@@ -10,6 +10,7 @@
         <local:VisibilityConverter x:Key="VisibilityConverter"/>
         <local:NameWithAvatarNameConverter x:Key="NameWithIndexConverter"/>
         <local:WidthConverter x:Key="WidthConverter"/>
+        <local:NameWithAvatarNameVisibilityConverter x:Key="NameVisibility"/>
     </Window.Resources>
 
     <!-- WindowStyle="None"  -->
@@ -42,6 +43,11 @@
                                    HorizontalAlignment="Center" 
                                    VerticalAlignment="Bottom" 
                                    Padding="5">
+                            <TextBlock.Visibility>
+                                <MultiBinding Converter="{StaticResource NameVisibility}">
+                                    <Binding Path="Name"/>                                    
+                                </MultiBinding>
+                            </TextBlock.Visibility>
                             <TextBlock.Text>
                                 <MultiBinding Converter="{StaticResource NameWithIndexConverter}">
                                     <Binding Path="Name"/>
