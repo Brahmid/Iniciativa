@@ -74,7 +74,7 @@ namespace Iniciativa
                 {
                     secondWindow = new Forplayers(Items);
                     secondWindow.Closed += OnPlayerWindowClosed;
-                }
+                }                
                 secondWindow.Show();
                 OpenPlayerWindow.Content = "Zavři hráčské okno";
                 OpenedForPlayers = true;
@@ -236,6 +236,52 @@ namespace Iniciativa
             CharacterItem newChar = new CharacterItem { Hide = true};
             Items.Add(newChar);
             Details.SetupDetail(newChar);
+        }
+
+        private void Opacity_Click(object sender, RoutedEventArgs e)
+        {
+            if (secondWindow != null)
+            {
+                if (secondWindow.AllowsTransparency)
+                {
+                    Forplayers thirdWindow = new Forplayers(Items);                  
+
+                    // Zkopírování velikosti
+                    thirdWindow.Width = secondWindow.Width;
+                    thirdWindow.Height = secondWindow.Height;
+
+                    // Zkopírování pozice
+                    thirdWindow.Left = secondWindow.Left;
+                    thirdWindow.Top = secondWindow.Top;
+                    secondWindow.Close();
+
+                    secondWindow = thirdWindow;
+                    // Zobrazení druhého okna
+                    thirdWindow.Show();
+                }
+                else
+                {
+                    Forplayers thirdWindow = new Forplayers(Items);
+
+                    thirdWindow.WindowStyle = WindowStyle.None; // Skryje rámeček
+                    thirdWindow.Background = Brushes.Transparent; // Plně průhledné pozadí                   
+                    thirdWindow.AllowsTransparency = true;
+
+                    // Zkopírování velikosti
+                    thirdWindow.Width = secondWindow.Width;
+                    thirdWindow.Height = secondWindow.Height;
+
+                    // Zkopírování pozice
+                    thirdWindow.Left = secondWindow.Left;
+                    thirdWindow.Top = secondWindow.Top;
+                    thirdWindow.Show();
+                    secondWindow.Close();
+
+                    secondWindow = thirdWindow;
+                    // Zobrazení druhého okna
+                    
+                }
+            }
         }
     }
 

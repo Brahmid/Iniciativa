@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Iniciativa"
-        mc:Ignorable="d"               
+        mc:Ignorable="d"
         Title="Forplayers" Height="360" Width="900" ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Hidden">
     <Window.Resources>
         <local:VisibilityConverter x:Key="VisibilityConverter"/>
@@ -21,18 +21,31 @@
             <ColumnDefinition Width="*"/>            
         </Grid.ColumnDefinitions>        
             
-        <ListBox x:Name="List" ItemsSource="{Binding Items}" BorderThickness="0" AlternationCount="100" ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Hidden">           
+        <ListBox x:Name="List" ItemsSource="{Binding Items}" BorderThickness="0" AlternationCount="100" ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Hidden" IsHitTestVisible="False" Background="Transparent">           
                 <ListBox.ItemTemplate>               
                 <DataTemplate>
                     <Grid>
+                        <Grid.Height>
+                            <MultiBinding Converter="{StaticResource WidthConverter}">
+                                <Binding Path="Hide"/>
+                                <Binding Path="ActualHeight" RelativeSource="{RelativeSource AncestorType=ItemsControl}"/>
+                            </MultiBinding>
+                        </Grid.Height>
+                        <Grid.Visibility>
+                            <MultiBinding Converter="{StaticResource VisibilityConverter}">
+                                <Binding Path="Hide"/>
+                            </MultiBinding>
+                        </Grid.Visibility>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-                        
-                        <!-- Obrázek -->
+                        </Grid.RowDefinitions>                        
+                            
+                            
+
+                                <!-- Obrázek -->
                         <Image  x:Name="Image" Source="{Binding AvatarPath}" Stretch="UniformToFill" />
 
                         <!-- Překrytí názvem -->
@@ -66,12 +79,12 @@
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
 
-            <ListBox.ItemContainerStyle>
+            <!-- <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">
                     <Setter Property="Width" Value="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType=ListBox}, Converter={StaticResource WidthConverter}}" />
                     <Setter Property="Height" Value="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType=ListBox}, Converter={StaticResource WidthConverter}}"/>
                 </Style>
-            </ListBox.ItemContainerStyle>
+            </ListBox.ItemContainerStyle> -->
         </ListBox>
     </Grid>
 </Window>

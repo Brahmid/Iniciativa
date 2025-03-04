@@ -14,20 +14,13 @@ namespace Iniciativa
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            if (values.Length < 2) return Visibility.Collapsed;
+            if (values.Length < 1) return Visibility.Collapsed;
 
-            bool isHidden = values[0] is bool hide && hide;
-            int index = values[1] is int alternationIndex ? alternationIndex : -1;
+            bool isHidden = values[0] is bool hide && hide;            
 
             if (isHidden)
             {
                 return Visibility.Collapsed;  // Skrytí, pokud je `Hide == true`
-            }
-
-            // Pokud je to první položka (AlternationIndex == 0)
-            if (index == 0)
-            {
-                return Visibility.Collapsed;  // Skrytí první položky
             }
 
             return Visibility.Visible; // Jinak zůstane viditelná
@@ -121,20 +114,24 @@ namespace Iniciativa
         }
     }
 
-    public class WidthConverter : IValueConverter
+    public class WidthConverter : IMultiValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is double actualWidth)
-            {
-                return actualWidth; // 3.5 položek na řádek
-            }
-            return 100; // Defaultní hodnota
+            if (values.Length < 2) return 100;
+
+            bool isHidden = values[0] is bool hide && hide;
+            double width = values[1] is double actualWidth ? actualWidth : 100;
+
+            if (isHidden == true)
+                return 0;
+
+            return width; // Defaultní hodnota
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            return null;
         }
     }
 }
