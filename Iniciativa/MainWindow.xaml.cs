@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics.Eventing.Reader;
 using System.Globalization;
 using System.Text;
@@ -21,6 +22,109 @@ namespace Iniciativa
         IdAndName,
         None
     }
+
+    public class InitiativeManager : INotifyPropertyChanged
+    {
+        private CharacterItem _currentTurnId;
+        public CharacterItem CurrentTurnId
+        {
+            get => _currentTurnId;
+            set
+            {
+                _currentTurnId = value;
+                OnPropertyChanged(nameof(SortedCharacters));
+            }
+        }
+
+        public InitiativeManager(ObservableCollection<CharacterItem> Items)
+        {
+            Characters = Items;
+        }
+
+        public ObservableCollection<CharacterItem> Characters { get; set; } = new();
+
+        public IEnumerable<CharacterItem> SortedCharacters =>
+        Characters.OrderByDescending(c => c == CurrentTurnId) // Aktuální tah první
+         .ThenByDescending(c => CurrentTurnId != null ? (CurrentTurnId.IsLowerInitiative(c) ? c.Initiative * 100 : c.Initiative) : c.Initiative)        // Seřazení podle iniciativy (sestupně)
+         .ThenByDescending(c => c.InitiativeSecond); // Pokud je stejná iniciativa, použije druhou hodnotu
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+        private void OnPropertyChanged(string propertyName) =>
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+        public void SetNextOnTurn()
+        {
+           
+            if (CurrentTurnId == null)
+            {
+                CurrentTurnId = GetCharacterWithBiggestInitiative();
+                return;
+            }
+
+            CharacterItem next = null;
+            foreach (var item in Characters)
+            {
+                if (item.Hide || item == CurrentTurnId)
+                    continue;
+                if (CurrentTurnId.IsLowerInitiative(item))
+                {
+                    if (next == null)
+                        next = item;
+                    else if (item.IsLowerInitiative(next))
+                    {
+                        next = item;
+                    }
+                }
+            }
+
+            if (next != null)
+                CurrentTurnId = next;
+            else
+            {
+                CurrentTurnId = GetCharacterWithBiggestInitiative();
+            }
+        }
+
+        private CharacterItem GetCharacterWithBiggestInitiative()
+        {
+            CharacterItem next = null;
+            foreach (var item in Characters)
+            {
+                if (item.Hide || CurrentTurnId == item)
+                    continue;
+                if (next == null)
+                {
+                    next = item;
+                    continue;
+                }
+
+                if (item.IsLowerInitiative(next))
+                {
+                    next = item;
+                }
+            }
+            if (next != null)
+                CurrentTurnId = next;
+            return next;
+        }
+
+        internal void Remove(CharacterItem charSelected)
+        {
+            if (charSelected == CurrentTurnId)
+            {
+                SetNextOnTurn();
+            }
+            Characters.Remove(charSelected);
+            OnPropertyChanged(nameof(SortedCharacters));
+        }
+
+        internal void Add(CharacterItem newChar)
+        {
+            Characters.Add(newChar);
+            OnPropertyChanged(nameof(SortedCharacters));
+        }
+    }
+
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -37,23 +141,25 @@ namespace Iniciativa
 
         private bool OpenedForPlayers = false;
 
+        InitiativeManager InitiativeManager;
+
         public MainWindow()
         {
             InitializeComponent();
             //Items = new ObservableCollection<CharacterItem>();
             Items = new ObservableCollection<CharacterItem>
             {
-            new CharacterItem { Name = "Aegir", AvatarName = "p_Aegir"},
-            new CharacterItem { Name = "Joogurt", AvatarName = "p_Joogurt" },
-            new CharacterItem { Name = "Vélin", AvatarName = "p_Velin"},
-            new CharacterItem { Name = "Šakal", AvatarName = "p_Sakal"},
-            new CharacterItem { Name = "Mantus",AvatarName = "p_Mantus"},
-            new CharacterItem { Name = "Jorge", AvatarName = "p_Jorge" },
-            new CharacterItem { Name = "Viki", AvatarName = "p_Victorie" },
-            new CharacterItem { Name = "Merric",AvatarName = "p_Merric"}
+            new CharacterItem { Name = "Aegir", AvatarName = "aeg", Initiative = 5},
+            new CharacterItem { Name = "Joogurt", AvatarName = "jog", Initiative = 15 },
+            new CharacterItem { Name = "Vélin", AvatarName = "vel", Initiative = 10},
+            new CharacterItem { Name = "Mantus",AvatarName = "man", Initiative = 19, InitiativeSecond = 10},
+            new CharacterItem { Name = "Jorge", AvatarName = "jor" , Initiative = 19, InitiativeSecond = 9},
+            new CharacterItem { Name = "Viki", AvatarName = "vic", Initiative = 3 },
+            new CharacterItem { Name = "Merric",AvatarName = "mer", Initiative = 19, InitiativeSecond = 18}
             };
             Details.UpdateVisibilityEvent += UpdateVisibility;
-            DataContext = this;            
+            InitiativeManager = new InitiativeManager(Items);
+            DataContext = InitiativeManager;            
         }
 
         private void OpenSecondWindow_Click(object sender, RoutedEventArgs e)
@@ -72,7 +178,7 @@ namespace Iniciativa
             {
                 if (secondWindow == null || !secondWindow.IsLoaded)
                 {
-                    secondWindow = new Forplayers(Items);
+                    secondWindow = new Forplayers(InitiativeManager);
                     secondWindow.Closed += OnPlayerWindowClosed;
                 }                
                 secondWindow.Show();
@@ -140,74 +246,15 @@ namespace Iniciativa
 
         private void Sort_Click(object sender, RoutedEventArgs e)
         {
-            SetNextOnTurn();
-            Details.SetupDetail(OnTurn);
-        }
-
-        private void SetNextOnTurn()
-        {
-            Sort();
-            if (OnTurn == null && Items.Count > 0)
-            {
-                OnTurn = Items[0];
-            }
-            else if (OnTurn != null && Items.Count > 2)
-            {
-                int it = Items.IndexOf(OnTurn);
-                int next = it;
-                do
-                {
-                    next = (next + 1) % Items.Count;
-                }
-                while (!Items[next].IsReady());
-                OnTurn = Items[next];
-                while (Items[0] != OnTurn)
-                {
-                    CharacterItem temp = Items[0];
-                    Items.RemoveAt(0);
-                    Items.Add(temp);
-                }
-            }
-        }
-
-        private void Sort()
-        {
-            for (int i = 0; i < Items.Count - 1; i++)
-            {
-                for (int j = 0; j < Items.Count - 1 - i; j++)
-                {
-                    if (Items[j].Initiative < Items[j + 1].Initiative)
-                    {
-                        // Výměna položek
-                        var temp = Items[j];
-                        Items[j] = Items[j + 1];
-                        Items[j + 1] = temp;
-                    }
-                    else if (Items[j].Initiative == Items[j + 1].Initiative)
-                    {
-                        if (Items[j].InitiativeSecond < Items[j + 1].InitiativeSecond)
-                        {
-                            // Výměna položek
-                            var temp = Items[j];
-                            Items[j] = Items[j + 1];
-                            Items[j + 1] = temp;
-                        }
-                        else if(String.Compare(Items[j].AvatarName, Items[j + 1].AvatarName, true) > 0)
-                        {
-                            var temp = Items[j];
-                            Items[j] = Items[j + 1];
-                            Items[j + 1] = temp;
-                        }
-                    }
-                }
-            }
+            InitiativeManager.SetNextOnTurn();
+            Details.SetupDetail(InitiativeManager.CurrentTurnId);            
         }
 
         private void UpdateVisibility(object sender, CharacterItem character)
         {
             if (character == OnTurn)
             {
-                SetNextOnTurn();
+                InitiativeManager.SetNextOnTurn();
             }
             if (secondWindow != null)
             {
@@ -220,21 +267,14 @@ namespace Iniciativa
             CharacterItem charSelected = Details.Character;
             if(charSelected!= null)
             {
-                Items.Remove(charSelected);
-                if (charSelected == OnTurn)
-                {
-                    SetNextOnTurn();
-                   
-                }
-                Details.SetupDetail(OnTurn);
-
+                InitiativeManager.Remove(charSelected);
             }
         }
 
         private void AddCharacter_Click(object sender, RoutedEventArgs e)
         {
             CharacterItem newChar = new CharacterItem { Hide = true};
-            Items.Add(newChar);
+            InitiativeManager.Add(newChar);
             Details.SetupDetail(newChar);
         }
 
@@ -244,7 +284,7 @@ namespace Iniciativa
             {
                 if (secondWindow.AllowsTransparency)
                 {
-                    Forplayers thirdWindow = new Forplayers(Items);                  
+                    Forplayers thirdWindow = new Forplayers(InitiativeManager);                  
 
                     // Zkopírování velikosti
                     thirdWindow.Width = secondWindow.Width;
@@ -261,7 +301,7 @@ namespace Iniciativa
                 }
                 else
                 {
-                    Forplayers thirdWindow = new Forplayers(Items);
+                    Forplayers thirdWindow = new Forplayers(InitiativeManager);
 
                     thirdWindow.WindowStyle = WindowStyle.None; // Skryje rámeček
                     thirdWindow.Background = Brushes.Transparent; // Plně průhledné pozadí                   

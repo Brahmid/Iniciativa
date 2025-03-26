@@ -100,6 +100,15 @@ namespace Iniciativa
             return true;
         }
 
+        public bool IsLowerInitiative(CharacterItem lower)
+        {
+            if(Initiative == lower.Initiative)
+            {
+                return lower.InitiativeSecond < InitiativeSecond;
+            }
+            return lower.Initiative < Initiative;
+        }
+
         public bool IsReady()
         {
            return !_hide;

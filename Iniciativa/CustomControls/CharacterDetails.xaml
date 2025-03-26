@@ -28,9 +28,9 @@
         <TextBox Grid.Column="2" HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding Name}" VerticalAlignment="Center" Width="120" Grid.Row="1" Margin="10,0,0,0"/>
         <TextBox Grid.Column="2" HorizontalAlignment="Left" Margin="10,0,0,0" TextWrapping="Wrap" Text="{Binding Initiative}" VerticalAlignment="Center" Width="47" Grid.Row="2"/>
         <TextBox Grid.Column="2" HorizontalAlignment="Left" Margin="76,0,0,0" TextWrapping="Wrap" Text="{Binding InitiativeSecond}" VerticalAlignment="Center" Width="47" Grid.Row="2"/>
-        <TextBox Grid.Column="2" HorizontalAlignment="Left" Margin="10,5,0,0" TextWrapping="Wrap" Text="{Binding Notes}" Width="120" Grid.Row="5" Grid.RowSpan="2" AcceptsReturn="True" AcceptsTab="True"/>
+        <TextBox Grid.Column="2" HorizontalAlignment="Left" Margin="10,5,0,0" TextWrapping="Wrap" Text="{Binding Notes}" Width="120" Grid.Row="6" Grid.RowSpan="2" AcceptsReturn="True" AcceptsTab="True"/>
         <TextBlock HorizontalAlignment="Right" TextWrapping="Wrap" Text="Iniciativa" VerticalAlignment="Center" Width="80" FlowDirection="RightToLeft" Grid.Row="2" Grid.ColumnSpan="2"/>
-        <TextBlock HorizontalAlignment="Right" TextWrapping="Wrap" Text="Poznamky" VerticalAlignment="Center" Width="80" FlowDirection="RightToLeft" Grid.Row="5" Grid.ColumnSpan="2" Margin="566,0,0,0"/>
+        <TextBlock HorizontalAlignment="Right" TextWrapping="Wrap" Text="Poznamky" VerticalAlignment="Top" Width="80" FlowDirection="RightToLeft" Grid.Row="6" Grid.ColumnSpan="2" Margin="566,0,0,0"/>
         <TextBlock HorizontalAlignment="Right" TextWrapping="Wrap" Text="Životy" VerticalAlignment="Center" Width="80" FlowDirection="RightToLeft" Grid.Row="3" Grid.ColumnSpan="2"/>
         <Grid Grid.Row="3" Grid.Column="2">
             <Grid.ColumnDefinitions>
@@ -52,8 +52,15 @@
             </Border>
 
         </Grid>
-        <TextBlock HorizontalAlignment="Right" TextWrapping="Wrap" Text="Schovat" VerticalAlignment="Center" Width="80" FlowDirection="RightToLeft" Grid.Row="4" Grid.ColumnSpan="2"/>
-        <CheckBox Grid.Column="2" IsChecked="{Binding Hide}" HorizontalAlignment="Left" Margin="14,0,0,0" Grid.Row="4" VerticalAlignment="Center" Click="CheckBox_Checked"/>
+        <TextBlock HorizontalAlignment="Right" TextWrapping="Wrap" Text="Schovat" VerticalAlignment="Center" Width="80" FlowDirection="RightToLeft" Grid.Row="5" Grid.ColumnSpan="2"/>
+        <CheckBox Grid.Column="2" IsChecked="{Binding Hide}" HorizontalAlignment="Left" Margin="14,0,0,0" Grid.Row="5" VerticalAlignment="Center" Click="CheckBox_Checked"/>
+        <Button Content="1" Height="20" Width="20" VerticalAlignment="Center" FontSize="7" HorizontalAlignment="Right" Background="#FFCECACA" Grid.Row="4" Grid.Column="1" Click="Add1_Click"/>
+        <Button Content="2" Height="20" Width="20" VerticalAlignment="Center" FontSize="7" HorizontalAlignment="Left" Background="#FFCECACA" Click="Add2_Click" Grid.Row="4" Grid.Column="2" Margin="2,0,0,0"/>
+        <Button Content="5" Height="20" Width="20" VerticalAlignment="Center" FontSize="7" HorizontalAlignment="Left" Background="#FFCECACA" Click="Add5_Click" Grid.Row="4" Grid.Column="2" Margin="24,0,0,0"/>
+        <Button Content="10" Height="20" Width="20" VerticalAlignment="Center" FontSize="7" HorizontalAlignment="Left" Background="#FFCECACA" Click="Add10_Click" Grid.Row="4" Grid.Column="2" Margin="48,0,0,0"/>
+        <Button Content="20" Height="20" Width="20" VerticalAlignment="Center" FontSize="7" HorizontalAlignment="Left" Background="#FFCECACA" Click="Add20_Click" Grid.Row="4" Grid.Column="2" Margin="70,0,0,0"/>
+        <Button Content="50" Height="20" Width="20" VerticalAlignment="Center" FontSize="7" HorizontalAlignment="Left" Background="#FFCECACA" Click="Add50_Click" Grid.Row="4" Grid.Column="2" Margin="92,0,0,0"/>
+        <Button Content="X" Height="20" Width="20" VerticalAlignment="Center" FontSize="7" HorizontalAlignment="Left" Background="#FFCECACA" Click="ClearCalc_Click" Grid.Row="4" Grid.Column="2" Margin="114,0,0,0"/>
 
 
 

@@ -20,18 +20,18 @@ namespace Iniciativa
     /// </summary>
     public partial class Forplayers : Window
     {
-        public ObservableCollection<CharacterItem> Items { get; set; }
-        public ObservableCollection<CharacterItem> ItemsEdited { get; set; }
+        public InitiativeManager Manager { get; set; }
+        //public ObservableCollection<CharacterItem> ItemsEdited { get; set; }
 
 
-        public Forplayers(ObservableCollection<CharacterItem> items)
+        public Forplayers(InitiativeManager manager)
         {
            
-            DataContext = this;
-            Items = items;
-            Items.CollectionChanged += Items_CollectionChanged;
+            DataContext = manager;
+            Manager = manager;
+            //Items.CollectionChanged += Items_CollectionChanged;
             Topmost = true; // Vždy nahoře           
-            ItemsEdited = new ObservableCollection<CharacterItem>();           
+            //ItemsEdited = new ObservableCollection<CharacterItem>();           
             InitializeComponent();
             
         }

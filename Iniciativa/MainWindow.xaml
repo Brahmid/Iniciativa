@@ -42,7 +42,7 @@
             <Button x:Name="RemoveCharacter" Content="Odebrat"  Width="100" Height="25" Grid.Column="2" Click="RemoveCharacter_Click"/>
             <Button Content="Další tah" Width="100" Height="25" Click="Sort_Click"/>
         </Grid>
-        <ListBox ItemsSource="{Binding Items}" BorderThickness="0" Grid.Row="1" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollBarVisibility="Disabled" AlternationCount="100">
+        <ListBox ItemsSource="{Binding SortedCharacters}" BorderThickness="0" Grid.Row="1" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollBarVisibility="Disabled" AlternationCount="100">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid Width="400" Height="150">

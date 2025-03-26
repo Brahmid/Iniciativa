@@ -42,16 +42,63 @@ namespace Iniciativa.CustomControls
         private void Dmg_Click(object sender, RoutedEventArgs e)
         {
             Character.HP = Character.HP - Convert.ToInt32(modifiHP.Text);
+            modifiHP.Text = "0";
         }
 
         private void Heal_Click(object sender, RoutedEventArgs e)
         {
             Character.HP = Character.HP + Convert.ToInt32(modifiHP.Text);
+            modifiHP.Text = "0";
         }
 
         private void CheckBox_Checked(object sender, RoutedEventArgs e)
         {
             UpdateVisibilityEvent?.Invoke(this,Character);
+        }
+
+        private void AddToCalc(int i)
+        {
+            int value;
+            if(Int32.TryParse(modifiHP.Text, out value))
+            {
+                value = value + i;
+                modifiHP.Text = value.ToString();
+            }
+        }
+
+        private void Add1_Click(object sender, RoutedEventArgs e)
+        {
+            AddToCalc(1);
+        }
+
+        private void Add2_Click(object sender, RoutedEventArgs e)
+        {
+            AddToCalc(2);
+        }
+
+        private void Add5_Click(object sender, RoutedEventArgs e)
+        {
+            AddToCalc(5);
+        }
+
+        private void Add10_Click(object sender, RoutedEventArgs e)
+        {
+            AddToCalc(10);
+        }
+
+        private void Add20_Click(object sender, RoutedEventArgs e)
+        {
+            AddToCalc(20);
+        }
+
+        private void Add50_Click(object sender, RoutedEventArgs e)
+        {
+            AddToCalc(50);
+        }
+
+        private void ClearCalc_Click(object sender, RoutedEventArgs e)
+        {
+            modifiHP.Text = "0";
         }
     }
 }
