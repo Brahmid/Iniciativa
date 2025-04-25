@@ -100,7 +100,7 @@ namespace Iniciativa
             return true;
         }
 
-        public bool IsLowerInitiative(CharacterItem lower)
+        public bool IsBiggerInitiativeThen(CharacterItem lower)
         {
             if(Initiative == lower.Initiative)
             {

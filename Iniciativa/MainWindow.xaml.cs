@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics.Eventing.Reader;
@@ -45,7 +46,7 @@ namespace Iniciativa
 
         public IEnumerable<CharacterItem> SortedCharacters =>
         Characters.OrderByDescending(c => c == CurrentTurnId) // Aktuální tah první
-         .ThenByDescending(c => CurrentTurnId != null ? (CurrentTurnId.IsLowerInitiative(c) ? c.Initiative * 100 : c.Initiative) : c.Initiative)        // Seřazení podle iniciativy (sestupně)
+         .ThenByDescending(c => CurrentTurnId != null ? (CurrentTurnId.IsLowerInitiative(c) ? (c.Initiative + 1) * 100 : c.Initiative) : c.Initiative)        // Seřazení podle iniciativy (sestupně)
          .ThenByDescending(c => c.InitiativeSecond); // Pokud je stejná iniciativa, použije druhou hodnotu
 
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -122,6 +123,30 @@ namespace Iniciativa
         {
             Characters.Add(newChar);
             OnPropertyChanged(nameof(SortedCharacters));
+        }
+
+        public bool CheckInitiative()
+        {
+            foreach (var item in Characters)
+            {
+                CharacterItem? wrongItem =  Characters.FirstOrDefault(x => x != item && x.Initiative == item.Initiative && x.InitiativeSecond == item.InitiativeSecond,null);
+                if (wrongItem != null)
+                {
+                    MessageBoxResult commonDialog = MessageBox.Show(                         
+                        String.Format("Postava {0}({1}) má stejnou iniciativu jako {2}({3}) iniciativa je {4} , {5}. \n Prosím změň to! Bez toho nemužem začít hrát.", 
+                                item.Name, 
+                                item.AvatarName, 
+                                wrongItem.Name, 
+                                wrongItem.AvatarName, 
+                                item.Initiative, 
+                                item.InitiativeSecond),
+                            "Dvě postavy maji stejnou iniciativu",
+                            MessageBoxButton.OK, 
+                            MessageBoxImage.Information);
+                    return false;
+                }
+            }
+            return true;
         }
     }
 
@@ -246,8 +271,11 @@ namespace Iniciativa
 
         private void Sort_Click(object sender, RoutedEventArgs e)
         {
-            InitiativeManager.SetNextOnTurn();
-            Details.SetupDetail(InitiativeManager.CurrentTurnId);            
+            if (InitiativeManager.CheckInitiative())
+            {
+                InitiativeManager.SetNextOnTurn();
+                Details.SetupDetail(InitiativeManager.CurrentTurnId);
+            }
         }
 
         private void UpdateVisibility(object sender, CharacterItem character)
