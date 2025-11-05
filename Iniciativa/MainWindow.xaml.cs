@@ -46,7 +46,7 @@ namespace Iniciativa
 
         public IEnumerable<CharacterItem> SortedCharacters =>
         Characters.OrderByDescending(c => c == CurrentTurnId) // Aktuální tah první
-         .ThenByDescending(c => CurrentTurnId != null ? (CurrentTurnId.IsLowerInitiative(c) ? (c.Initiative + 1) * 100 : c.Initiative) : c.Initiative)        // Seřazení podle iniciativy (sestupně)
+         .ThenByDescending(c => CurrentTurnId != null ? (CurrentTurnId.IsBiggerInitiativeThen(c) ? (c.Initiative + 1) * 100 : c.Initiative) : c.Initiative)        // Seřazení podle iniciativy (sestupně)
          .ThenByDescending(c => c.InitiativeSecond); // Pokud je stejná iniciativa, použije druhou hodnotu
 
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -67,11 +67,11 @@ namespace Iniciativa
             {
                 if (item.Hide || item == CurrentTurnId)
                     continue;
-                if (CurrentTurnId.IsLowerInitiative(item))
+                if (CurrentTurnId.IsBiggerInitiativeThen(item))
                 {
                     if (next == null)
                         next = item;
-                    else if (item.IsLowerInitiative(next))
+                    else if (item.IsBiggerInitiativeThen(next))
                     {
                         next = item;
                     }
@@ -99,7 +99,7 @@ namespace Iniciativa
                     continue;
                 }
 
-                if (item.IsLowerInitiative(next))
+                if (item.IsBiggerInitiativeThen(next))
                 {
                     next = item;
                 }
