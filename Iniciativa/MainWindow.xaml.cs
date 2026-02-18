@@ -12,6 +12,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Media.Media3D;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
@@ -127,26 +128,19 @@ namespace Iniciativa
 
         public bool CheckInitiative()
         {
+            bool result = true;
             foreach (var item in Characters)
             {
                 CharacterItem? wrongItem =  Characters.FirstOrDefault(x => x != item && x.Initiative == item.Initiative && x.InitiativeSecond == item.InitiativeSecond,null);
                 if (wrongItem != null)
                 {
-                    MessageBoxResult commonDialog = MessageBox.Show(                         
-                        String.Format("Postava {0}({1}) má stejnou iniciativu jako {2}({3}) iniciativa je {4} , {5}. \n Prosím změň to! Bez toho nemužem začít hrát.", 
-                                item.Name, 
-                                item.AvatarName, 
-                                wrongItem.Name, 
-                                wrongItem.AvatarName, 
-                                item.Initiative, 
-                                item.InitiativeSecond),
-                            "Dvě postavy maji stejnou iniciativu",
-                            MessageBoxButton.OK, 
-                            MessageBoxImage.Information);
-                    return false;
+                    Random rnd = new Random();
+                    wrongItem.InitiativeSecond = rnd.Next(1, 21);
+                    item.InitiativeSecond = rnd.Next(1,21);
+                    result = false;
                 }
             }
-            return true;
+            return result;
         }
     }
 
@@ -174,13 +168,12 @@ namespace Iniciativa
             //Items = new ObservableCollection<CharacterItem>();
             Items = new ObservableCollection<CharacterItem>
             {
-            new CharacterItem { Name = "Aegir", AvatarName = "aeg", Initiative = 5},
-            new CharacterItem { Name = "Joogurt", AvatarName = "jog", Initiative = 15 },
-            new CharacterItem { Name = "Vélin", AvatarName = "vel", Initiative = 10},
-            new CharacterItem { Name = "Mantus",AvatarName = "man", Initiative = 19, InitiativeSecond = 10},
-            new CharacterItem { Name = "Jorge", AvatarName = "jor" , Initiative = 19, InitiativeSecond = 9},
-            new CharacterItem { Name = "Viki", AvatarName = "vic", Initiative = 3 },
-            new CharacterItem { Name = "Merric",AvatarName = "mer", Initiative = 19, InitiativeSecond = 18}
+            new CharacterItem { Name = "Maneo", AvatarName = "mane", Initiative = 5},
+            new CharacterItem { Name = "Sorn", AvatarName = "sor", Initiative = 15 },
+            new CharacterItem { Name = "Mirak",AvatarName = "mir", Initiative = 19, InitiativeSecond = 10},
+            new CharacterItem { Name = "Wilfred", AvatarName = "wil" , Initiative = 19, InitiativeSecond = 9},
+            new CharacterItem { Name = "Lila", AvatarName = "lil", Initiative = 3 },
+            new CharacterItem { Name = "Azh'rath",AvatarName = "az", Initiative = 19, InitiativeSecond = 18}
             };
             Details.UpdateVisibilityEvent += UpdateVisibility;
             InitiativeManager = new InitiativeManager(Items);
@@ -271,11 +264,9 @@ namespace Iniciativa
 
         private void Sort_Click(object sender, RoutedEventArgs e)
         {
-            if (InitiativeManager.CheckInitiative())
-            {
-                InitiativeManager.SetNextOnTurn();
-                Details.SetupDetail(InitiativeManager.CurrentTurnId);
-            }
+            while (!InitiativeManager.CheckInitiative()) { }
+            InitiativeManager.SetNextOnTurn();
+            Details.SetupDetail(InitiativeManager.CurrentTurnId);
         }
 
         private void UpdateVisibility(object sender, CharacterItem character)
@@ -323,7 +314,10 @@ namespace Iniciativa
                     thirdWindow.Top = secondWindow.Top;
                     secondWindow.Close();
 
+                    float rotation = secondWindow.rotation;
+
                     secondWindow = thirdWindow;
+                    thirdWindow.Rotate(rotation);
                     // Zobrazení druhého okna
                     thirdWindow.Show();
                 }
@@ -342,14 +336,23 @@ namespace Iniciativa
                     // Zkopírování pozice
                     thirdWindow.Left = secondWindow.Left;
                     thirdWindow.Top = secondWindow.Top;
+                    thirdWindow.Rotate(secondWindow.rotation);
                     thirdWindow.Show();
                     secondWindow.Close();
-
+                    
                     secondWindow = thirdWindow;
                     // Zobrazení druhého okna
                     
                 }
             }
+        }
+
+        private void Rotate_Click(object sender, RoutedEventArgs e)
+        {
+            if(secondWindow != null)
+            {
+                secondWindow.Rotate();
+            }            
         }
     }
 

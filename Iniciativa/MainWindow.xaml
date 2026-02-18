@@ -16,7 +16,7 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="30"/>
+            <RowDefinition Height="60"/>            
             <RowDefinition Height="*"/>
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
@@ -27,10 +27,18 @@
                 <ColumnDefinition Width="120"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
             <Button x:Name="OpenPlayerWindow" Content="Otevři hráčské okno" Click="OpenSecondWindow_Click" Height="25" Margin="10,0,10,0"/>
             <Button x:Name="NameShow" Content="Jméno(id)" Click="CloseSecondWindow_Click" Grid.Column="1" Width="100" Height="25"/>
             <Button x:Name="Opacity" Content="Invisible" Click="Opacity_Click" Grid.Column="2" Width="100" Height="25"/>
+            <Button x:Name="Rotate" Content="Otočit" Click="Rotate_Click" Width="100" Height="25" Grid.Row="1"/>
+            
         </Grid>
+        
         <Grid Grid.Column="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="120"/>
@@ -38,10 +46,15 @@
                 <ColumnDefinition Width="120"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
             <Button x:Name="AddCharacter" Content="Přidat"  Width="100" Height="25" Click="AddCharacter_Click" Grid.Column="1"/>
             <Button x:Name="RemoveCharacter" Content="Odebrat"  Width="100" Height="25" Grid.Column="2" Click="RemoveCharacter_Click"/>
             <Button Content="Další tah" Width="100" Height="25" Click="Sort_Click"/>
         </Grid>
+        
         <ListBox ItemsSource="{Binding SortedCharacters}" BorderThickness="0" Grid.Row="1" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollBarVisibility="Disabled" AlternationCount="100">
             <ListBox.ItemTemplate>
                 <DataTemplate>
@@ -89,6 +102,6 @@
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
         </ListBox>
-        <CustomControls:CharacterDetails x:Name="Details" Grid.Column="1" Grid.Row="1"/>
+        <CustomControls:CharacterDetails x:Name="Details" Grid.Column="1" Grid.Row="1" Margin="12,0,0,0"/>
     </Grid>
 </Window>

@@ -100,5 +100,13 @@ namespace Iniciativa.CustomControls
         {
             modifiHP.Text = "0";
         }
+
+        private void Gen_Click(object sender, RoutedEventArgs e)
+        {
+            Random rnd = new Random();
+            int value = rnd.Next(1, 21);
+            Character.Initiative = value + Character.Dex;
+        }
+        
     }
 }

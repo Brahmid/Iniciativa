@@ -18,6 +18,7 @@ namespace Iniciativa
         private int _hp;
         private bool _hide;
         private string _avatarName;
+        private int _dex;
 
         public string Name
         {
@@ -35,6 +36,12 @@ namespace Iniciativa
         {
             get => _hp;
             set => SetField(ref _hp, value);
+        }
+
+        public int Dex
+        {
+            get => _dex;
+            set => SetField(ref _dex, value);
         }
 
         public int Initiative
