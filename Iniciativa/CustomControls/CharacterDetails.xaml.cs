@@ -106,7 +106,15 @@ namespace Iniciativa.CustomControls
             Random rnd = new Random();
             int value = rnd.Next(1, 21);
             Character.Initiative = value + Character.Dex;
+        }              
+             
+        private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            var slider = sender as Slider;
+            if (slider != null)
+            {
+                Character.Dex = (int)slider.Value;
+            }
         }
-        
     }
 }

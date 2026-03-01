@@ -10,6 +10,9 @@
     <Compile Update="CustomControls\CharacterDetails.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="CustomControls\MultiAdd.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Forplayers.xaml.cs">
       <SubType>Code</SubType>
     </Compile>

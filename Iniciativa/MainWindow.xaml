@@ -51,6 +51,7 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Button x:Name="AddCharacter" Content="Přidat"  Width="100" Height="25" Click="AddCharacter_Click" Grid.Column="1"/>
+            <Button x:Name="AddMultiCharacters" Content="Hormadně přidat"  Width="100" Height="25" Click="AddMultiCharacters_Click" Grid.Column="1" Grid.Row="1"/>
             <Button x:Name="RemoveCharacter" Content="Odebrat"  Width="100" Height="25" Grid.Column="2" Click="RemoveCharacter_Click"/>
             <Button Content="Další tah" Width="100" Height="25" Click="Sort_Click"/>
         </Grid>

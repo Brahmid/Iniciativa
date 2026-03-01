@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿using Iniciativa.CustomControls;
+using Microsoft.Win32;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -286,7 +287,16 @@ namespace Iniciativa
             CharacterItem charSelected = Details.Character;
             if(charSelected!= null)
             {
+                int oldIndex = InitiativeManager.Characters.IndexOf(charSelected);
                 InitiativeManager.Remove(charSelected);
+                if (InitiativeManager.Characters.Count > oldIndex)
+                {
+                    Details.SetupDetail(InitiativeManager.Characters[oldIndex]);
+                }
+                else if (InitiativeManager.Characters.Count > 0)
+                {
+                    Details.SetupDetail(InitiativeManager.Characters.Last());
+                }
             }
         }
 
@@ -296,6 +306,37 @@ namespace Iniciativa
             InitiativeManager.Add(newChar);
             Details.SetupDetail(newChar);
         }
+
+
+        private void AddMultiCharacters_Click(object sender, RoutedEventArgs e)
+        {
+            var window = new MultiAdd();
+
+            window.Owner = this; // volitelné, ale doporučené
+
+            bool? result = window.ShowDialog();
+
+            if (result == true)
+            {
+                var data = window.Result;
+
+                // Tady máš hotová data
+                foreach (var id in data.Ids)                {
+                    
+                    CharacterItem newChar = new CharacterItem { Hide = true, HP = data.HP, AvatarName = id.ToString(), Dex = data.Modifier};
+                    InitiativeManager.Add(newChar);
+                    Details.SetupDetail(newChar);
+                    if(data.GenerateInitiative)
+                    {
+                        Random rnd = new Random();
+                        newChar.Initiative = rnd.Next(1, 21) + data.Modifier;
+                    }
+                }
+            }
+
+            
+        }
+        
 
         private void Opacity_Click(object sender, RoutedEventArgs e)
         {
